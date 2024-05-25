@@ -1,21 +1,21 @@
 import java.util.*;
 
 public class MyGraph<Vertex> {
-    private Map<Vertex, List<Vertex>> list;
+    private Map<Vertex, Map<Vertex, Integer>> list;
 
     public MyGraph(){
         list = new HashMap<>();
     }
 
     public void addVertex(Vertex vertex) {
-        list.put(vertex, new ArrayList<>());
+        list.put(vertex, new HashMap<>());
     }
 
-    public void addEdge(Vertex source, Vertex destination) {
+    public void addEdge(Vertex source, Vertex destination, int weight) {
         checkVertex(source);
         checkVertex(destination);
-        list.get(source).add(destination);
-        list.get(destination).add(source);
+        list.get(source).put(destination,weight);
+        list.get(destination).put(source,weight); //The method now takes an additional weight parameter.
     }
 
     private void checkVertex(Vertex vertex) {
@@ -26,25 +26,26 @@ public class MyGraph<Vertex> {
     public boolean hasEdge(Vertex source, Vertex destination) {
         checkVertex(source);
         checkVertex(destination);
-        List<Vertex> neighbors = getNeighbors(source);
-        return neighbors != null && neighbors.contains(destination);
+        return list.get(source).containsKey(destination);
     }
 
-    public List<Vertex> getNeighbors(Vertex vertex) {
-        List<Vertex> neighbors = list.get(vertex);
-        return neighbors;
+    public Map<Vertex, Integer> getNeighbors(Vertex vertex) {
+        checkVertex(vertex);
+        return list.get(vertex);
     }
 
     public void printGraph() {
-        for(Vertex vertex : list.keySet()) {
-            System.out.println("Vertex " + vertex + " connected to " + getNeighbors(vertex));
+        for (Vertex vertex : list.keySet()) {
+            System.out.println("Vertex " + vertex + " connected to: ");
+            for (Map.Entry<Vertex, Integer> neighbor : list.get(vertex).entrySet()) {
+                System.out.println(neighbor.getKey() + " (weight: " + neighbor.getValue() + ")");
+            }
         }
     }
 
     public void removeEdge(Vertex source, Vertex destination) {
         checkVertex(source);
         checkVertex(destination);
-
         list.get(source).remove(destination);
         list.get(destination).remove(source);
     }
