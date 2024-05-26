@@ -9,6 +9,7 @@ public class Main {
         graph.addVertex("B");
         graph.addVertex("C");
         graph.addVertex("D");
+        graph.addVertex("Z");
 
         //Adding edges
         graph.addEdge("A", "B", 5);
@@ -31,9 +32,14 @@ public class Main {
         //Getting neighbors
         Map<String, Integer> neighbors = graph.getNeighbors("C");
         System.out.println(neighbors);
-        System.out.println(graph.hasEdge("A","B"));//Hassing edges :)
+        //Hassing edges :)
+        System.out.println(graph.hasEdge("A","B"));
 
-
+        //BFS
+        System.out.println("+++++++++++++++++++++++++++++++");
         graph.addEdge("A", "B", 5);
+        graph.removeEdge("C","D");
+        graph.addEdge("C", "Z", 0);
+        bFS.search(graph, "A");
     }
 }
